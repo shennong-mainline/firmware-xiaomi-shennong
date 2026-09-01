@@ -1,0 +1,52 @@
+name: pacman package
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends makepkg pacman-package-manager libarchive-tools zstd
+
+      - name: Build package
+        run: |
+          set -euo pipefail
+          cat > ~/.makepkg.conf <<'EOF'
+          PKGEXT='.pkg.tar.zst'
+          PACKAGER='GitHub Actions'
+          EOF
+          source ./PKGBUILD
+          makepkg -d
+          pkg=$pkgname-$pkgver-$pkgrel-any.pkg.tar.zst
+          repo-add shennong.db.tar.gz "$pkg"
+          rm -f shennong.db shennong.files
+          cp -a shennong.db.tar.gz shennong.db
+          cp -a shennong.files.tar.gz shennong.files
+          cp -a "$pkg" "$pkgname-any.pkg.tar.zst"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          source ./PKGBUILD
+          tag=$pkgver-$pkgrel
+          gh release delete "$tag" --yes --cleanup-tag || true
+          gh release create "$tag" \
+            --title "$pkgname $tag" \
+            --notes "Pacman repo. Add [shennong] with Server = this release latest/download, then pacman -Sy firmware-xiaomi-shennong." \
+            "$pkgname-any.pkg.tar.zst" \
+            shennong.db \
+            shennong.db.tar.gz \
+            shennong.files \
+            shennong.files.tar.gz \
+            "$pkgname-$tag-any.pkg.tar.zst"

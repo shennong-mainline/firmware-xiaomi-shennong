@@ -1,0 +1,15 @@
+pkgbase = firmware-xiaomi-shennong
+	pkgdesc = Device firmware for Xiaomi 14 Pro (shennong / SM8650)
+	pkgver = 20260901
+	pkgrel = 1
+	url = https://github.com/shennong-mainline/firmware-xiaomi-shennong
+	arch = any
+	license = custom
+	provides = linux-firmware-ath12k-wcn7850
+	conflicts = linux-firmware-atheros
+	options = !strip
+	options = !emptydirs
+	options = !debug
+	options = !lto
+
+pkgname = firmware-xiaomi-shennong
