@@ -1,0 +1,4 @@
+The SN220 NFC download image in blobs/nxp/libsn220u_fw.so is extracted
+from Xiaomi HyperOS vendor firmware (libsn220u_fw.so) and is proprietary
+to NXP / Xiaomi. It is redistributed only for running this device.
+The extracted payload is installed as /usr/lib/firmware/nxp/libsn220u_fw.bin.
