@@ -1,6 +1,6 @@
 # Maintainer: kmiit <kmiit@foxmail.com>
 pkgname=firmware-xiaomi-shennong
-pkgver=20260901
+pkgver=20260906
 pkgrel=1
 pkgdesc="Device firmware for Xiaomi 14 Pro (shennong / SM8650)"
 url="https://github.com/shennong-mainline/firmware-xiaomi-shennong"
